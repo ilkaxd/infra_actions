@@ -26,3 +26,5 @@ jobs:
         run: |
           # Запуск проверки проекта по flake8
           python -m flake8
+          cd infra_ptoject/
+          python manage.py test
