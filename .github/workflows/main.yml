@@ -15,16 +15,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # Обновление pip
+          # РћР±РЅРѕРІР»РµРЅРёРµ pip
           python -m pip install --upgrade pip
-          # Установка flake8 и его плагинов
+          # РЈСЃС‚Р°РЅРѕРІРєР° flake8 Рё РµРіРѕ РїР»Р°РіРёРЅРѕРІ
           pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
-          # Установка зависимостей
+          # РЈСЃС‚Р°РЅРѕРІРєР° Р·Р°РІРёСЃРёРјРѕСЃС‚РµР№
           pip install -r requirements.txt
 
       - name: Test with flake8 and django tests
         run: |
-          # Запуск проверки проекта по flake8
+          # Р—Р°РїСѓСЃРє РїСЂРѕРІРµСЂРєРё РїСЂРѕРµРєС‚Р° РїРѕ flake8
           python -m flake8
           cd infra_project/
           python manage.py test
@@ -35,16 +35,16 @@ jobs:
     needs: tests
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2 # Проверяет доступность репозитория DockerHub для workflow
+        uses: actions/checkout@v2 # РџСЂРѕРІРµСЂСЏРµС‚ РґРѕСЃС‚СѓРїРЅРѕСЃС‚СЊ СЂРµРїРѕР·РёС‚РѕСЂРёСЏ DockerHub РґР»СЏ workflow
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1 # Вызывает сборщик контейнеров docker
+        uses: docker/setup-buildx-action@v1 # Р’С‹Р·С‹РІР°РµС‚ СЃР±РѕСЂС‰РёРє РєРѕРЅС‚РµР№РЅРµСЂРѕРІ docker
       - name: Login to Docker 
-        uses: docker/login-action@v1 # Запуск скрипта авторизации на DockerHub
+        uses: docker/login-action@v1 # Р—Р°РїСѓСЃРє СЃРєСЂРёРїС‚Р° Р°РІС‚РѕСЂРёР·Р°С†РёРё РЅР° DockerHub
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push to Docker Hub
-        uses: docker/build-push-action@v2 # Выполняет push образа в DockerHub 
+        uses: docker/build-push-action@v2 # Р’С‹РїРѕР»РЅСЏРµС‚ push РѕР±СЂР°Р·Р° РІ DockerHub 
         with:
           push: true
           tags: ilkaxd/infra_project:latest
@@ -60,9 +60,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            # Выполняет pull образа с DockerHub
+            # Р’С‹РїРѕР»РЅСЏРµС‚ pull РѕР±СЂР°Р·Р° СЃ DockerHub
             sudo docker pull ilkaxd/infra_project
-            # Остановка всех контейнеров
+            # РћСЃС‚Р°РЅРѕРІРєР° РІСЃРµС… РєРѕРЅС‚РµР№РЅРµСЂРѕРІ
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker run --rm -d -p 5000:5000 ilkaxd/infra_project
   send_message:
@@ -74,4 +74,4 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: ${{ github.workflow }} успешно выполнен!
+        message: ${{ github.workflow }} СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРµРЅ!
